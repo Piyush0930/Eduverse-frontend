@@ -32,12 +32,25 @@ export default function Signup() {
         }
 
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000").trim();
+            console.log(`[Signup] Attempting fetch to: ${apiUrl}/api/auth/signup`);
+
             const res = await fetch(`${apiUrl}/api/auth/signup`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData)
             });
+
+            console.log(`[Signup] Response Status: ${res.status}`);
+            const contentType = res.headers.get("content-type");
+            console.log(`[Signup] Content-Type: ${contentType}`);
+
+            if (!contentType || !contentType.includes("application/json")) {
+                const text = await res.text();
+                console.error(`[Signup] Expected JSON but got: ${text.substring(0, 100)}...`);
+                throw new Error("Server did not return JSON. Check the console for details.");
+            }
+
             const data = await res.json();
             if (res.ok) {
                 localStorage.setItem("token", data.token);

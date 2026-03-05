@@ -35,10 +35,24 @@ export default function Dashboard() {
 
     const fetchRecommendations = async (branch: string, token: string) => { // Accept token as argument
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-            const res = await fetch(`${apiUrl}/api/courses`, {
+            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000").trim();
+            console.log(`[Dashboard] Fetching from: ${apiUrl}/api/courses/recommend/${encodeURIComponent(branch)}`);
+
+            const res = await fetch(`${apiUrl}/api/courses/recommend/${encodeURIComponent(branch)}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
+
+            console.log(`[Dashboard] Response Status: ${res.status}`);
+            const contentType = res.headers.get("content-type");
+
+            if (!contentType || !contentType.includes("application/json")) {
+                const text = await res.text();
+                console.error(`[Dashboard] Expected JSON but got: ${text.substring(0, 100)}...`);
+                // Fallback to dummy data on error
+                setCourses(getBranchDummyCourses(branch).slice(0, 5));
+                return;
+            }
+
             const data = await res.json();
             const branchDummy = getBranchDummyCourses(branch);
             const combined = [...data, ...branchDummy.slice(0, 5 - data.length)].slice(0, 5);

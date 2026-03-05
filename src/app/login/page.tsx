@@ -17,7 +17,7 @@ export default function Login() {
         setError("");
 
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000").trim();
             const res = await fetch(`${apiUrl}/api/auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
