@@ -29,13 +29,16 @@ export default function Dashboard() {
         } else {
             const parsedUser = JSON.parse(storedUser);
             setUser(parsedUser);
-            fetchRecommendations(parsedUser.branch);
+            fetchRecommendations(parsedUser.branch, parsedUser.token); // Pass token to fetchRecommendations
         }
     }, [router]);
 
-    const fetchRecommendations = async (branch: string) => {
+    const fetchRecommendations = async (branch: string, token: string) => { // Accept token as argument
         try {
-            const res = await fetch(`http://localhost:5000/api/courses/recommend/${encodeURIComponent(branch)}`);
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+            const res = await fetch(`${apiUrl}/api/courses`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             const data = await res.json();
             const branchDummy = getBranchDummyCourses(branch);
             const combined = [...data, ...branchDummy.slice(0, 5 - data.length)].slice(0, 5);

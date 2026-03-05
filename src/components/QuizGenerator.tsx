@@ -13,7 +13,8 @@ export default function QuizGenerator() {
         if (!topic.trim()) return;
         setLoading(true);
         try {
-            const res = await fetch("http://localhost:5000/api/quiz/generate-quiz", {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+            const res = await fetch(`${apiUrl}/api/quiz/generate-quiz`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ topic })
@@ -106,8 +107,8 @@ export default function QuizGenerator() {
                                             setAnswers(newAnswers);
                                         }}
                                         className={`text-left px-5 py-3.5 rounded-xl font-bold text-sm transition-all border-2 ${answers[qIdx] === oIdx
-                                                ? "bg-white border-[#4f46e5] text-[#4f46e5] shadow-sm shadow-indigo-50"
-                                                : "bg-white border-white text-slate-500 hover:border-slate-200"
+                                            ? "bg-white border-[#4f46e5] text-[#4f46e5] shadow-sm shadow-indigo-50"
+                                            : "bg-white border-white text-slate-500 hover:border-slate-200"
                                             }`}
                                     >
                                         <div className="flex items-center space-x-3">

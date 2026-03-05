@@ -26,7 +26,8 @@ export default function AIChatbot({ branch }: { branch: string }) {
         setLoading(true);
 
         try {
-            const res = await fetch("http://localhost:5000/api/ai/chat", {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+            const res = await fetch(`${apiUrl}/api/ai/chat`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ question: input, branch })
@@ -92,8 +93,8 @@ export default function AIChatbot({ branch }: { branch: string }) {
                         {messages.map((m, i) => (
                             <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start animate-in fade-in slide-in-from-left-2 duration-300"}`}>
                                 <div className={`max-w-[85%] px-5 py-4 rounded-[1.5rem] text-sm font-bold leading-relaxed shadow-sm ${m.role === "user"
-                                        ? "bg-[#4f46e5] text-white rounded-br-none"
-                                        : "bg-white text-slate-700 border border-slate-100 rounded-bl-none"
+                                    ? "bg-[#4f46e5] text-white rounded-br-none"
+                                    : "bg-white text-slate-700 border border-slate-100 rounded-bl-none"
                                     }`}>
                                     {m.content}
                                 </div>
