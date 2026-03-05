@@ -32,7 +32,7 @@ export default function Signup() {
         }
 
         try {
-            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000").trim();
+            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000").trim().replace(/\/$/, "");
             console.log(`[Signup] Attempting fetch to: ${apiUrl}/api/auth/signup`);
 
             const res = await fetch(`${apiUrl}/api/auth/signup`, {

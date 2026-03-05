@@ -35,7 +35,7 @@ export default function Dashboard() {
 
     const fetchRecommendations = async (branch: string, token: string) => { // Accept token as argument
         try {
-            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000").trim();
+            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000").trim().replace(/\/$/, "");
             console.log(`[Dashboard] Fetching from: ${apiUrl}/api/courses/recommend/${encodeURIComponent(branch)}`);
 
             const res = await fetch(`${apiUrl}/api/courses/recommend/${encodeURIComponent(branch)}`, {

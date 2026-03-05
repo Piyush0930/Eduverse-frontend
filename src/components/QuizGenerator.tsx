@@ -13,7 +13,7 @@ export default function QuizGenerator() {
         if (!topic.trim()) return;
         setLoading(true);
         try {
-            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000").trim();
+            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000").trim().replace(/\/$/, "");
             const res = await fetch(`${apiUrl}/api/quiz/generate-quiz`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
